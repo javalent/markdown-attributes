@@ -1,0 +1,39 @@
+.better-comments-settings .better-comments-additional-container {
+    border-bottom: 0px solid var(--background-modifier-border);
+    padding: 18px 0 0 0;
+    background-color: inherit;
+}
+
+.better-comments-settings .better-comments-additional-container > .additional {
+    margin: 6px 12px;
+}
+
+.better-comments-settings .better-comments-additional-container .add-new-tag {
+    justify-content: space-between;
+}
+.better-comments-settings
+    .better-comments-additional-container
+    .add-new-tag.setting-item-control
+    > input:first-child {
+    margin-left: 0 !important;
+}
+
+.better-comments-settings
+    .better-comments-additional-container
+    > .additional
+    > .setting-item {
+    border-top: 0;
+    padding-top: 9px;
+}
+.better-comments-settings
+    .better-comments-additional-container
+    > .additional
+    > .setting-item
+    > .setting-item-control
+    > *:first-child {
+    margin: 0 6px;
+}
+
+.better-comments-settings .setting-item-name.better-comments {
+    width: fit-content;
+}

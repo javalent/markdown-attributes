@@ -1,0 +1,26 @@
+{
+    "name": "markdown-attributes",
+    "version": "0.0.1",
+    "description": "Add markdown attributes to elements in Obsidian.md",
+    "main": "main.js",
+    "scripts": {
+        "dev": "rollup --config rollup.config-dev.js -w",
+        "build": "rollup --config rollup.config.js"
+    },
+    "keywords": [],
+    "author": "Jeremy Valentine",
+    "license": "MIT",
+    "devDependencies": {
+        "@popperjs/core": "^2.9.2",
+        "@rollup/plugin-commonjs": "^15.1.0",
+        "@rollup/plugin-node-resolve": "^9.0.0",
+        "@rollup/plugin-typescript": "^6.0.0",
+        "@types/node": "^14.14.2",
+        "markdown-it-attrs": "^4.0.0",
+        "obsidian": "https://github.com/obsidianmd/obsidian-api/tarball/master",
+        "rollup": "^2.32.1",
+        "rollup-plugin-css-only": "^3.1.0",
+        "tslib": "^2.0.3",
+        "typescript": "^4.0.3"
+    }
+}
