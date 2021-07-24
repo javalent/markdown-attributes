@@ -6,15 +6,14 @@ import {
     TextComponent
 } from "obsidian";
 
+
 import "./main.css";
-import { getAttrs } from "./utils/utils";
-const defaultOptions = {
-    leftDelimiter: "{",
-    rightDelimiter: "}",
-    allowedAttributes: <string[]>[]
-};
+import { AttrListTreeprocessor } from "./utils/utils";
+
+const BASE_REG = /\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
 export default class BetterComments extends Plugin {
     data = {};
+    processor: AttrListTreeprocessor;
     async saveSettings() {
         await this.saveData({});
     }
@@ -26,13 +25,18 @@ export default class BetterComments extends Plugin {
         console.log(`Markdown Attributes v${this.manifest.version} loaded.`);
 
         await this.loadSettings();
+        this.processor = new AttrListTreeprocessor();
 
         this.registerMarkdownPostProcessor(this.postprocessor.bind(this));
     }
 
     async postprocessor(el: HTMLElement, ctx: MarkdownPostProcessorContext) {
-        let text = el.innerText;
-        console.log(getAttrs(text, 0, defaultOptions));
+        const children = Array.from(el.children);
+
+        if (!children.length) return;
+
+        this.processor.run(el);
+
     }
 
     async onunload() {
