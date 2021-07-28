@@ -1,6 +1,6 @@
 {
     "name": "markdown-attributes",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Add markdown attributes to elements in Obsidian.md",
     "main": "main.js",
     "scripts": {
