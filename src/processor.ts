@@ -111,9 +111,7 @@ export default class Processor {
                 attributes: this.getAttrs(attribute_string),
                 text: attribute_string
             });
-            (el as HTMLElement).innerText = (
-                el as HTMLElement
-            ).innerText.replace(original, "");
+            el.innerHTML = el.innerHTML.replace(original, "");
         } else if (Processor.BASE_RE.test(text)) {
             // Attributes are inline.
 
