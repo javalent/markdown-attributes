@@ -59,6 +59,7 @@ export default class MarkdownAttributes extends Plugin {
 
             for (let [key, value] of attributes) {
                 if (!key) continue;
+                if (value) value = value.replace(/("|')/g, "");
                 if (key === "class") {
                     element.addClasses(value.split(" "));
                 } else if (!value) {

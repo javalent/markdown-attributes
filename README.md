@@ -21,7 +21,7 @@ Currently, the ID attribute must be set using `id=value` due to Obsidian's tags.
 Inline text elements such as italics, bold, highlight, etc. should have their attributes placed _inside_ the symbol:
 
 ```
-I'm normal text, but *I'm italic {: class='italics' }*
+I'm normal text, but *I'm italic {: class='italics' }*, **I'm bold {: .bold }** and ==I'm highlighted {: id=highlight }==.
 ```
 
 ### Paragraphs

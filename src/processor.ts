@@ -61,6 +61,8 @@ export default class Processor {
         for (let pair of trys) {
             if (!pair || !pair.length) continue;
 
+
+            
             //#id
             /* if (pair.charAt(0) === idChar) {
                 attrs.push(["id", pair.slice(1)]);
