@@ -8,8 +8,10 @@ export default class Processor {
     static BASE_RE = /\{\:[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
     static BLOCK_RE = /\n[ ]*\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}[ ]*$/;
 
+    constructor(private topLevelElement: HTMLElement) {}
+
     static parse(el: HTMLElement) {
-        return new Processor().recurseAndParseElements(el);
+        return new Processor(el).recurseAndParseElements(el);
     }
 
     /**
@@ -61,8 +63,6 @@ export default class Processor {
         for (let pair of trys) {
             if (!pair || !pair.length) continue;
 
-
-            
             //#id
             /* if (pair.charAt(0) === idChar) {
                 attrs.push(["id", pair.slice(1)]);
@@ -103,20 +103,33 @@ export default class Processor {
 
         // Text content of this node and *not* the children.
         const text = this.getTopLevelText(el);
+        console.log("🚀 ~ file: processor.ts ~ line 102 ~ el", text);
 
         if (Processor.BLOCK_RE.test(text)) {
             // Attributes should apply to the whole block.
+
+            let element = el;
+            if (el instanceof HTMLLIElement) {
+                // Need to apply attributes to containing UL if HTMLLIElement has a block attribute
+                element = el.parentElement;
+            }
+
             let [original, attribute_string] =
-                text.match(Processor.BASE_RE) ?? [];
+                text.match(Processor.BLOCK_RE) ?? [];
             elements.push({
-                element: el,
+                element: element,
                 attributes: this.getAttrs(attribute_string),
                 text: attribute_string
             });
             el.innerHTML = el.innerHTML.replace(original, "");
+
+            //rerun parser if LI element to get inlines
+            if (el instanceof HTMLLIElement) {
+                elements.push(...this.recurseAndParseElements(el));
+            }
         } else if (Processor.BASE_RE.test(text)) {
             // Attributes are inline.
-
+            console.log(Processor.BASE_RE.test(text));
             // Get the text nodes that contains the attribute string.
             let textNode = Array.from(el.childNodes).find(
                 (node) =>
@@ -134,6 +147,10 @@ export default class Processor {
 
             // Collapsible elements are a special case due to the collapse handle.
             if (sibling && sibling.hasClass("collapse-indicator")) {
+                console.log(
+                    "🚀 ~ file: processor.ts ~ line 150 ~ Processor.BASE_RE.test(text)",
+                    Processor.BASE_RE.test(text)
+                );
                 sibling = sibling.parentElement;
             }
 

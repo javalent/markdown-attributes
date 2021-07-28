@@ -61,12 +61,28 @@ Both Wikilinks and markdown syntax links may have attributes placed on them.
 
 ### Lists
 
-Lists may have attributes placed on each individual list item. At this time there is not a way to place attributes on a containing `<ul>`.
+Lists may have attributes placed on each individual list item.
 
 ```markdown
 -   item {: .item}
     -   nested item {: .nested}
     -   nested item 2 {: id="item 2" }
+```
+
+Attributes can only be applied to the final nested list by placing the attribute on the line immediately following the last item.
+
+```markdown
+-   item 1 {: .item}
+-   item 2 {: id=item }
+-   item 3 {: data-item=3 }
+    {: .top-level-ul }
+```
+
+```markdown
+-   item {: .item}
+    -   nested item {: .nested}
+    -   nested item 2 {: id="item 2" }
+        {: .nested-ul}
 ```
 
 ### Code Blocks
