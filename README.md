@@ -43,13 +43,24 @@ Attributes must be added to headers at the end of the line.
 
 ### Tables
 
-Currently, there is not a way to add attributes to an entire table or table row. However, attributes can be added to individual table cells like so:
+Attributes can be added to the `<table>` element by placing the attribute on the line below it.
+
+```markdown
+| header1 | header2 |
+| ------- | ------- |
+| column1 | column2 |
+{: .table-class}
+```
+
+Attributes can be added to individual table cells like so:
 
 ```markdown
 | header1 {: .class} | header2                |
 | ------------------ | ---------------------- |
 | column1            | column2 {: .class-two} |
 ```
+
+It is not currently possible to add attributes to `<tr>` or `<thead>` elements.
 
 ### Links
 

@@ -43,6 +43,47 @@ export default class MarkdownAttributes extends Plugin {
             child.prepend(new Text(attribute_string));
         }
 
+        /**
+         * Table elements should check the next line in the source to see if it is a single block attribute,
+         * because those block attributes are not applied to the table.
+         */
+        if (child instanceof HTMLTableElement) {
+            if (!ctx.getSectionInfo(topElement)) return;
+
+            /** Pull the Section data. */
+            const { text, lineEnd } = ctx.getSectionInfo(topElement);
+
+            /** Get the source for this element. */
+            let source = (
+                text.split("\n").slice(lineEnd + 1, lineEnd + 2) ?? []
+            ).shift();
+
+            /** Test if the element contains attributes. */
+            if (
+                !source ||
+                !source.length ||
+                !Processor.ONLY_RE.test(source.trim())
+            )
+                return;
+
+            /** Pull the matched string and add it to the child so the Processor catches it. */
+            let [attribute_string] = source.match(Processor.ONLY_RE) ?? [];
+            child.prepend(new Text(attribute_string));
+
+            str = topElement.innerText;
+        }
+
+        /**
+         * If the element is a <p> and the text is *only* an attribute, it was used as a block attribute
+         * and should be removed.
+         */
+        if (child instanceof HTMLParagraphElement) {
+            if (Processor.ONLY_RE.test(child.innerText.trim())) {
+                child.detach();
+                return;
+            }
+        }
+
         /** Test if the element contains attributes. */
         if (!Processor.BASE_RE.test(str)) return;
 

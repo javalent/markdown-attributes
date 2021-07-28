@@ -6,6 +6,7 @@ interface ElementWithAttributes {
 
 export default class Processor {
     static BASE_RE = /\{\:[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
+    static ONLY_RE = /^\{\:[ ]*([^\}\n ][^\}\n]*)[ ]*\}$/;
     static BLOCK_RE = /\n[ ]*\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}[ ]*$/;
 
     constructor(private topLevelElement: HTMLElement) {}
@@ -103,7 +104,6 @@ export default class Processor {
 
         // Text content of this node and *not* the children.
         const text = this.getTopLevelText(el);
-        console.log("🚀 ~ file: processor.ts ~ line 102 ~ el", text);
 
         if (Processor.BLOCK_RE.test(text)) {
             // Attributes should apply to the whole block.
@@ -129,7 +129,6 @@ export default class Processor {
             }
         } else if (Processor.BASE_RE.test(text)) {
             // Attributes are inline.
-            console.log(Processor.BASE_RE.test(text));
             // Get the text nodes that contains the attribute string.
             let textNode = Array.from(el.childNodes).find(
                 (node) =>
@@ -147,10 +146,6 @@ export default class Processor {
 
             // Collapsible elements are a special case due to the collapse handle.
             if (sibling && sibling.hasClass("collapse-indicator")) {
-                console.log(
-                    "🚀 ~ file: processor.ts ~ line 150 ~ Processor.BASE_RE.test(text)",
-                    Processor.BASE_RE.test(text)
-                );
                 sibling = sibling.parentElement;
             }
 
