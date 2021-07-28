@@ -1,4 +1,41 @@
-# Better Comments
+# Markdown Attributes for Obsidian.md
+
+Allows the use of `{: .class id='id' data=value }` markdown attributes inside Obsidian.md.
+
+## Using the Plugin
+
+Add your attributes inside a curly bracket with a colon, like this:
+
+`{: .class }`
+
+### IDs
+
+Currently, the ID attribute must be set using `id=value` due to Obsidian's tags. This may change in a future release.
+
+### Headers
+
+Attributes must be added to headers at the end of the line.
+
+`### A Header {: id=header .header-class }`
+
+### Tables
+
+Currently, there is not a way to add attributes to an entire table or table row. However, attributes can be added to individual table cells like so:
+
+```markdown
+| header1 {: .class} | header2                |
+| ------------------ | ---------------------- |
+| column1            | column2 {: .class-two} |
+```
+
+### Links
+
+Both Wikilinks and markdown syntax links may have attributes placed on them.
+
+`[link](http://example.com){: class="foo bar" title="Some title!" }`
+
+`[[Test 123]] {: .wikilink}`
+
 ## 0.0.1
 
 -   Release

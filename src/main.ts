@@ -1,45 +1,76 @@
-import {
-    MarkdownPostProcessorContext,
-    Plugin,
-    PluginSettingTab,
-    Setting,
-    TextComponent
-} from "obsidian";
+import { MarkdownPostProcessorContext, Plugin } from "obsidian";
 
+import Processor from "./processor";
 
-import "./main.css";
-import { AttrListTreeprocessor } from "./utils/utils";
-
-const BASE_REG = /\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
-export default class BetterComments extends Plugin {
-    data = {};
-    processor: AttrListTreeprocessor;
-    async saveSettings() {
-        await this.saveData({});
-    }
-
-    async loadSettings() {
-        this.data = Object.assign({}, {}, await this.loadData());
-    }
+export default class MarkdownAttributes extends Plugin {
+    parsing: Map<MarkdownPostProcessorContext, string> = new Map();
     async onload(): Promise<void> {
         console.log(`Markdown Attributes v${this.manifest.version} loaded.`);
-
-        await this.loadSettings();
-        this.processor = new AttrListTreeprocessor();
 
         this.registerMarkdownPostProcessor(this.postprocessor.bind(this));
     }
 
-    async postprocessor(el: HTMLElement, ctx: MarkdownPostProcessorContext) {
-        const children = Array.from(el.children);
+    async postprocessor(
+        topElement: HTMLElement,
+        ctx: MarkdownPostProcessorContext
+    ) {
+        let str = topElement.innerText;
+        const child = topElement.firstElementChild;
+        if (!child) return;
 
-        if (!children.length) return;
+        /** Code blocks have to be handled separately because Obsidian does not
+         *  include any text past the language.
+         *
+         *  Unfortunately this also means that changes to the code block attributes
+         *  require reloading the note to take effect.
+         */
+        if (child instanceof HTMLPreElement) {
+            /** If getSectionInfo returns null, stop processing. */
+            if (!ctx.getSectionInfo(topElement)) return;
 
-        this.processor.run(el);
+            /** Pull the Section data. */
+            const { text, lineStart, lineEnd } = ctx.getSectionInfo(topElement);
 
+            /** Get the source for this element. */
+            let source = text.split("\n").slice(lineStart, lineEnd + 1);
+            str = source.join("\n");
+
+            /** Test if the element contains attributes. */
+            if (!Processor.BASE_RE.test(str)) return;
+
+            /** Pull the matched string and add it to the child so the Processor catches it. */
+            let [attribute_string] = str.match(Processor.BASE_RE) ?? [];
+            child.prepend(new Text(attribute_string));
+        }
+
+        /** Test if the element contains attributes. */
+        if (!Processor.BASE_RE.test(str)) return;
+
+        /** Parse the element using the Processor. */
+        if (!(child instanceof HTMLElement)) return;
+        let elements = Processor.parse(child);
+
+        /** If the processor did not find any attributes, return. */
+        if (!elements || !elements.length) return;
+
+        /** Add the attributes to the elements returned from the processor. */
+        for (let { element, attributes } of elements) {
+            if (!element || !attributes || !attributes.length) continue;
+
+            for (let [key, value] of attributes) {
+                if (!key) continue;
+                if (key === "class") {
+                    element.addClasses(value.split(" "));
+                } else if (!value) {
+                    element.setAttr(key, true);
+                } else {
+                    element.setAttr(key, value);
+                }
+            }
+        }
     }
 
     async onunload() {
-        console.log("Better Comments unloaded");
+        console.log("Markdown Attributes unloaded");
     }
 }
