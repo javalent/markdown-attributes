@@ -5,8 +5,8 @@ interface ElementWithAttributes {
 }
 
 export default class Processor {
-    static BASE_RE = /\{\:[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
-    static ONLY_RE = /^\{\:[ ]*([^\}\n ][^\}\n]*)[ ]*\}$/;
+    static BASE_RE = /\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
+    static ONLY_RE = /^\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}$/;
     static BLOCK_RE = /\n[ ]*\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}[ ]*$/;
 
     constructor(private topLevelElement: HTMLElement) {}
