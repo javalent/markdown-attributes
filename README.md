@@ -106,7 +106,9 @@ nums = [x for x in range(10)]
 ```
 ````
 
-## 0.0.1
+Please note that at the moment, changes to code block attributes will not take effect until you reload the note.
+
+## 1.0.0
 
 -   Release
 
