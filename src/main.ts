@@ -14,15 +14,15 @@ export default class MarkdownAttributes extends Plugin {
         topElement: HTMLElement,
         ctx: MarkdownPostProcessorContext
     ) {
-        let str = topElement.innerText;
         const child = topElement.firstElementChild;
         if (!child) return;
+        let str: string;
 
         /** Code blocks have to be handled separately because Obsidian does not
          *  include any text past the language.
          *
          *  Unfortunately this also means that changes to the code block attributes
-         *  require reloading the note to take effect.
+         *  require reloading the note to take effect because they do not trigger the postprocessor.
          */
         if (child instanceof HTMLPreElement) {
             /** If getSectionInfo returns null, stop processing. */
@@ -60,17 +60,16 @@ export default class MarkdownAttributes extends Plugin {
 
             /** Test if the element contains attributes. */
             if (
-                !source ||
-                !source.length ||
-                !Processor.ONLY_RE.test(source.trim())
-            )
-                return;
+                source &&
+                source.length &&
+                Processor.ONLY_RE.test(source.trim())
+            ) {
+                /** Pull the matched string and add it to the child so the Processor catches it. */
+                let [attribute_string] = source.match(Processor.ONLY_RE) ?? [];
+                child.prepend(new Text(attribute_string));
 
-            /** Pull the matched string and add it to the child so the Processor catches it. */
-            let [attribute_string] = source.match(Processor.ONLY_RE) ?? [];
-            child.prepend(new Text(attribute_string));
-
-            str = topElement.innerText;
+                str = topElement.innerText;
+            }
         }
 
         /**
@@ -85,7 +84,7 @@ export default class MarkdownAttributes extends Plugin {
         }
 
         /** Test if the element contains attributes. */
-        if (!Processor.BASE_RE.test(str)) return;
+        if (!Processor.BASE_RE.test(str ?? topElement.innerText)) return;
 
         /** Parse the element using the Processor. */
         if (!(child instanceof HTMLElement)) return;
