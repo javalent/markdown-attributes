@@ -1,6 +1,6 @@
 # Markdown Attributes for Obsidian.md
 
-Allows the use of `{ .class id='id' data=value }` markdown attributes inside Obsidian.md.
+Allows the use of `{ .class id='id' data=value }` Pandoc-style markdown attributes inside Obsidian.md.
 
 This plugin is currently proof of concept; however, no loss of data should occur. It is possible that rendering errors may happen. If so, please create an issue including the source text that caused the issue.
 
@@ -143,3 +143,6 @@ You can follow the same procedure to update the plugin
 
 This plugin comes with no guarantee of stability and bugs may delete data.
 Please ensure you have automated backups.
+
+
+<a href="https://www.buymeacoffee.com/valentine195"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=valentine195&button_colour=acd9fb&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00"></a>
