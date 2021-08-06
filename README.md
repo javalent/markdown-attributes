@@ -145,4 +145,4 @@ This plugin comes with no guarantee of stability and bugs may delete data.
 Please ensure you have automated backups.
 
 
-<a href="https://www.buymeacoffee.com/valentine195"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=valentine195&button_colour=acd9fb&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00"></a>
+<a href="https://www.buymeacoffee.com/valentine195"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=valentine195&button_colour=e3e7ef&font_colour=262626&font_family=Inter&outline_colour=262626&coffee_colour=ff0000"></a>
