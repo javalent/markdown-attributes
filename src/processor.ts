@@ -168,8 +168,11 @@ export default class Processor {
         }
 
         // Recursively find all attributes from the children of this element.
+
         for (let child of Array.from(el.children)) {
             if (!(child instanceof HTMLElement)) continue;
+            if (child instanceof HTMLPreElement || child.tagName.toLowerCase() === "code")
+                continue;
             elements.push(...this.recurseAndParseElements(child));
         }
 
