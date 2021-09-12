@@ -88,27 +88,7 @@ export default class MarkdownAttributes extends Plugin {
 
         /** Parse the element using the Processor. */
         if (!(child instanceof HTMLElement)) return;
-        let elements = Processor.parse(child);
-
-        /** If the processor did not find any attributes, return. */
-        if (!elements || !elements.length) return;
-
-        /** Add the attributes to the elements returned from the processor. */
-        for (let { element, attributes } of elements) {
-            if (!element || !attributes || !attributes.length) continue;
-
-            for (let [key, value] of attributes) {
-                if (!key) continue;
-                if (value) value = value.replace(/("|')/g, "");
-                if (key === "class") {
-                    element.addClasses(value.split(" "));
-                } else if (!value) {
-                    element.setAttr(key, true);
-                } else {
-                    element.setAttr(key, value);
-                }
-            }
-        }
+        Processor.parse(child);
     }
 
     async onunload() {

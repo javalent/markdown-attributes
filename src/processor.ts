@@ -2,6 +2,7 @@ interface ElementWithAttributes {
     element: Element;
     attributes: [string, string][];
     text: string;
+    /* replacer: (...args: any) => void; */
 }
 
 export default class Processor {
@@ -116,12 +117,20 @@ export default class Processor {
 
             let [original, attribute_string] =
                 text.match(Processor.BLOCK_RE) ?? [];
-            elements.push({
-                element: element,
+            const toAdd = {
+                element,
                 attributes: this.getAttrs(attribute_string),
                 text: attribute_string
-            });
-            el.innerHTML = el.innerHTML.replace(original, "");
+            };
+
+            elements.push(toAdd);
+            el.innerHTML = this.tryToReplace(
+                toAdd.element,
+                el.innerHTML,
+                toAdd.attributes,
+                original
+            );
+            /* el.innerHTML = el.innerHTML.replace(original, ""); */
 
             //rerun parser if LI element to get inlines
             if (el instanceof HTMLLIElement) {
@@ -157,25 +166,67 @@ export default class Processor {
             let [original, attribute_string] =
                 text.match(Processor.BASE_RE) ?? [];
 
-            elements.push({
+            const toAdd = {
                 element: sibling,
                 attributes: this.getAttrs(attribute_string),
                 text: attribute_string
-            });
+            };
+
+            elements.push(toAdd);
 
             // Remove the original attribute string from the text content.
-            textNode.textContent = textNode.textContent.replace(original, "");
+            textNode.textContent = this.tryToReplace(
+                toAdd.element,
+                textNode.textContent,
+                toAdd.attributes,
+                original
+            );
+            /* textNode.textContent = textNode.textContent.replace(original, ""); */
         }
 
         // Recursively find all attributes from the children of this element.
 
         for (let child of Array.from(el.children)) {
             if (!(child instanceof HTMLElement)) continue;
-            if (child instanceof HTMLPreElement || child.tagName.toLowerCase() === "code")
+            if (
+                child instanceof HTMLPreElement ||
+                child.tagName.toLowerCase() === "code"
+            )
                 continue;
             elements.push(...this.recurseAndParseElements(child));
         }
 
         return elements;
+    }
+    tryToReplace(
+        element: Element,
+        content: string,
+        attributes: [string, string][],
+        original: string
+    ) {
+        if (!attributes || !attributes.length) {
+            return content;
+        }
+
+        for (let [key, value] of attributes) {
+            if (!key) continue;
+            if (value) value = value.replace(/("|')/g, "");
+            try {
+                if (key === "class") {
+                    element.addClasses(value.split(" "));
+                } else if (!value) {
+                    element.setAttr(key, true);
+                } else {
+                    element.setAttr(key, value);
+                }
+            } catch (e) {
+                console.log(
+                    `Markdown Attributes: ${key} is not a valid attribute.`
+                );
+                return content;
+            }
+        }
+
+        return content.replace(original, "");
     }
 }
