@@ -108,6 +108,17 @@ nums = [x for x in range(10)]
 
 Please note that at the moment, changes to code block attributes will not take effect until you reload the note.
 
+### Block Quotes
+
+Block quotes can by targeted by placing the attributes directly after the last line of the quote.
+
+```md
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+{ .class }
+
+```
+
 ## 1.0.0
 
 -   Release

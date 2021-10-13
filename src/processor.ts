@@ -110,7 +110,10 @@ export default class Processor {
             // Attributes should apply to the whole block.
 
             let element = el;
-            if (el instanceof HTMLLIElement) {
+            if (
+                el instanceof HTMLLIElement ||
+                el?.parentElement instanceof HTMLQuoteElement
+            ) {
                 // Need to apply attributes to containing UL if HTMLLIElement has a block attribute
                 element = el.parentElement;
             }
