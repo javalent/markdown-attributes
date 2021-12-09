@@ -4,8 +4,14 @@
     "description": "Add markdown attributes to elements in Obsidian.md",
     "main": "main.js",
     "scripts": {
-        "dev": "rollup --config rollup.config-dev.js -w",
-        "build": "rollup --config rollup.config.js"
+        "build": "node esbuild.config.mjs production",
+        "dev": "node esbuild.config.mjs",
+        "rollup:dev": "rollup --config rollup.config-dev.js -w",
+        "rollup:build": "rollup --config rollup.config.js",
+        "release": "standard-version"
+    },
+    "standard-version": {
+        "t": ""
     },
     "keywords": [],
     "author": "Jeremy Valentine",
@@ -15,9 +21,12 @@
         "@rollup/plugin-node-resolve": "^9.0.0",
         "@rollup/plugin-typescript": "^6.0.0",
         "@types/node": "^14.14.2",
+        "dotenv": "^10.0.0",
+        "esbuild": "^0.14.2",
         "obsidian": "^0.12.17",
         "rollup": "^2.32.1",
         "rollup-plugin-css-only": "^3.1.0",
+        "standard-version": "^9.3.2",
         "tslib": "^2.0.3",
         "typescript": "^4.0.3"
     }
