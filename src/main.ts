@@ -1,4 +1,4 @@
-import { MarkdownPostProcessorContext, Plugin } from "obsidian";
+import { MarkdownPostProcessorContext, Plugin, TFile } from "obsidian";
 
 import Processor from "./processor";
 
@@ -29,12 +29,15 @@ export default class MarkdownAttributes extends Plugin {
             if (!ctx.getSectionInfo(topElement)) return;
 
             /** Pull the Section data. */
-            const { text, lineStart, lineEnd } = ctx.getSectionInfo(topElement);
+            const { lineStart } = ctx.getSectionInfo(topElement);
 
-            /** Get the source for this element. */
-            let source = text.split("\n").slice(lineStart, lineEnd + 1);
-            str = source.join("\n");
+            const file = this.app.vault.getAbstractFileByPath(ctx.sourcePath);
+            if (!(file instanceof TFile)) return;
+            const text = await this.app.vault.cachedRead(file);
 
+            /** Get the source for this element. Only look at the top line for code blocks. */
+            let source = text.split("\n").slice(lineStart, lineStart + 1);
+            let str = source.join("\n");
             /** Test if the element contains attributes. */
             if (!Processor.BASE_RE.test(str)) return;
 
