@@ -37,7 +37,7 @@ export default class MarkdownAttributes extends Plugin {
 
             /** Get the source for this element. Only look at the top line for code blocks. */
             let source = text.split("\n").slice(lineStart, lineStart + 1);
-            let str = source.join("\n");
+            str = source.join("\n");
             /** Test if the element contains attributes. */
             if (!Processor.BASE_RE.test(str)) return;
 
@@ -47,10 +47,13 @@ export default class MarkdownAttributes extends Plugin {
         }
 
         /**
-         * Table elements should check the next line in the source to see if it is a single block attribute,
+         * Table elements and Mathjax elements should check the next line in the source to see if it is a single block attribute,
          * because those block attributes are not applied to the table.
          */
-        if (child instanceof HTMLTableElement) {
+        if (
+            child instanceof HTMLTableElement ||
+            (child.hasClass("math") && child.hasClass("math-block"))
+        ) {
             if (!ctx.getSectionInfo(topElement)) return;
 
             /** Pull the Section data. */
