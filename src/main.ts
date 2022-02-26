@@ -82,7 +82,7 @@ export default class MarkdownAttributes extends Plugin {
          * If the element is a <p> and the text is *only* an attribute, it was used as a block attribute
          * and should be removed.
          */
-        if (child instanceof HTMLParagraphElement) {
+        if (child instanceof HTMLParagraphElement && !child.childElementCount) {
             if (Processor.ONLY_RE.test(child.innerText.trim())) {
                 child.detach();
                 return;
