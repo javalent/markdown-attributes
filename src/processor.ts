@@ -112,11 +112,14 @@ export default class Processor {
             let element = el;
             if (
                 el instanceof HTMLLIElement ||
-                el?.parentElement instanceof HTMLQuoteElement
+                el?.parentElement instanceof HTMLQuoteElement ||
+                el?.hasClass("callout")
             ) {
                 // Need to apply attributes to containing UL if HTMLLIElement has a block attribute
                 element = el.parentElement;
             }
+
+            console.log(el, el.parentElement.childElementCount);
 
             let [original, attribute_string] =
                 text.match(Processor.BLOCK_RE) ?? [];
