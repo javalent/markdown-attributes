@@ -119,6 +119,8 @@ Block quotes can by targeted by placing the attributes directly after the last l
 
 ```
 
+> :pencil: This syntax also works for Obsidian callouts!
+
 ## 1.0.0
 
 -   Release

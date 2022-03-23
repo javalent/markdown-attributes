@@ -119,8 +119,6 @@ export default class Processor {
                 element = el.parentElement;
             }
 
-            console.log(el, el.parentElement.childElementCount);
-
             let [original, attribute_string] =
                 text.match(Processor.BLOCK_RE) ?? [];
             const toAdd = {

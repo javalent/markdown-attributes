@@ -52,16 +52,28 @@ export default class MarkdownAttributes extends Plugin {
          */
         if (
             child instanceof HTMLTableElement ||
-            (child.hasClass("math") && child.hasClass("math-block"))
+            (child.hasClass("math") && child.hasClass("math-block")) ||
+            child.hasClass("callout")
         ) {
+            console.log("🚀 ~ file: main.ts ~ line 58 ~ child", child);
             if (!ctx.getSectionInfo(topElement)) return;
 
             /** Pull the Section data. */
             const { text, lineEnd } = ctx.getSectionInfo(topElement);
+            console.log(
+                "🚀 ~ file: main.ts ~ line 63 ~ text",
+                text.split("\n"),
+                lineEnd
+            );
+
+            /** Callouts include the block level attribute */
+            const adjustment = child.hasClass("callout") ? 0 : 1;
 
             /** Get the source for this element. */
             let source = (
-                text.split("\n").slice(lineEnd + 1, lineEnd + 2) ?? []
+                text
+                    .split("\n")
+                    .slice(lineEnd + adjustment, lineEnd + adjustment + 1) ?? []
             ).shift();
 
             /** Test if the element contains attributes. */
