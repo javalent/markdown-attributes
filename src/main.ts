@@ -1,6 +1,42 @@
-import { MarkdownPostProcessorContext, Plugin, TFile } from "obsidian";
+import {
+    editorLivePreviewField,
+    editorViewField,
+    MarkdownPostProcessorContext,
+    Plugin,
+    requireApiVersion,
+    TFile
+} from "obsidian";
+import { Range } from "@codemirror/rangeset";
+import {
+    EditorView,
+    Decoration,
+    ViewPlugin,
+    DecorationSet,
+    ViewUpdate
+} from "@codemirror/view";
+import { syntaxTree } from "@codemirror/language";
+import { tokenClassNodeProp } from "@codemirror/stream-parser";
+import {
+    SelectionRange,
+    StateEffect,
+    StateField,
+    EditorState
+} from "@codemirror/state";
 
 import Processor from "./processor";
+
+export const isLivePreview = (state: EditorState) => {
+    if (requireApiVersion && requireApiVersion("0.13.23")) {
+        return state.field(editorLivePreviewField);
+    } else {
+        const md = state.field(editorViewField);
+        const { state: viewState } = md.leaf.getViewState() ?? {};
+
+        return (
+            viewState && viewState.mode == "source" && viewState.source == false
+        );
+    }
+};
 
 export default class MarkdownAttributes extends Plugin {
     parsing: Map<MarkdownPostProcessorContext, string> = new Map();
@@ -8,6 +44,7 @@ export default class MarkdownAttributes extends Plugin {
         console.log(`Markdown Attributes v${this.manifest.version} loaded.`);
 
         this.registerMarkdownPostProcessor(this.postprocessor.bind(this));
+        this.registerEditorExtension(this.state());
     }
 
     async postprocessor(
@@ -55,16 +92,10 @@ export default class MarkdownAttributes extends Plugin {
             (child.hasClass("math") && child.hasClass("math-block")) ||
             child.hasClass("callout")
         ) {
-            console.log("🚀 ~ file: main.ts ~ line 58 ~ child", child);
             if (!ctx.getSectionInfo(topElement)) return;
 
             /** Pull the Section data. */
             const { text, lineEnd } = ctx.getSectionInfo(topElement);
-            console.log(
-                "🚀 ~ file: main.ts ~ line 63 ~ text",
-                text.split("\n"),
-                lineEnd
-            );
 
             /** Callouts include the block level attribute */
             const adjustment = child.hasClass("callout") ? 0 : 1;
@@ -108,8 +139,210 @@ export default class MarkdownAttributes extends Plugin {
         if (!(child instanceof HTMLElement)) return;
         Processor.parse(child);
     }
+    state() {
+        //https://gist.github.com/nothingislost/faa89aa723254883d37f45fd16162337
+        type TokenSpec = {
+            from: number;
+            to: number;
+            loc: { from: number; to: number };
+            attributes: [string, string][];
+            value: string;
+            index: number;
+        };
+
+        class StatefulDecorationSet {
+            editor: EditorView;
+            replacers: { [cls: string]: Decoration } = Object.create(null);
+            markers: { [cls: string]: Decoration } = Object.create(null);
+
+            constructor(editor: EditorView) {
+                this.editor = editor;
+            }
+            async compute(tokens: TokenSpec[]) {
+                const replace: Range<Decoration>[] = [];
+                for (let token of tokens) {
+                    //need to add in additional locations to the caches so that the reveal transaction will properly surface them
+
+                    const deco = Decoration.replace({
+                        inclusive: true,
+                        loc: token.loc
+                    });
+
+                    const marker = Decoration.mark({
+                        inclusive: true,
+                        attributes: Object.fromEntries(token.attributes),
+                        loc: token.loc
+                    });
+
+                    replace.push(
+                        deco.range(token.from, token.to),
+                        marker.range(token.loc.from, token.loc.to)
+                    );
+                }
+                return Decoration.set(replace, true);
+            }
+
+            async updateDecos(tokens: TokenSpec[]): Promise<void> {
+                const replacers = await this.compute(tokens);
+                // if our compute function returned nothing and the state field still has decorations, clear them out
+                if (replace || this.editor.state.field(field).size) {
+                    this.editor.dispatch({
+                        effects: [replace.of(replacers ?? Decoration.none)]
+                    });
+                }
+            }
+        }
+
+        const plugin = ViewPlugin.fromClass(
+            class {
+                manager: StatefulDecorationSet;
+                source = false;
+
+                constructor(view: EditorView) {
+                    this.manager = new StatefulDecorationSet(view);
+                    this.build(view);
+                }
+
+                update(update: ViewUpdate) {
+                    if (!isLivePreview(update.view.state)) {
+                        if (this.source == false) {
+                            this.source = true;
+                            this.manager.updateDecos([]);
+                        }
+                        return;
+                    }
+                    if (
+                        update.docChanged ||
+                        update.viewportChanged ||
+                        update.selectionSet ||
+                        this.source == true
+                    ) {
+                        this.source = false;
+                        this.build(update.view);
+                    }
+                }
+
+                destroy() {}
+
+                build(view: EditorView) {
+                    if (!isLivePreview(view.state)) return;
+                    const targetElements: TokenSpec[] = [];
+                    for (let { from, to } of view.visibleRanges) {
+                        const tree = syntaxTree(view.state);
+                        tree.iterate({
+                            from,
+                            to,
+                            enter: (type, from, to) => {
+                                const tokenProps =
+                                    type.prop(tokenClassNodeProp);
+
+                                const props = new Set(tokenProps?.split(" "));
+                                if (
+                                    props.has("hmd-codeblock") &&
+                                    !props.has("formatting-code-block")
+                                )
+                                    return;
+                                const original = view.state.doc.sliceString(
+                                    from,
+                                    to
+                                );
+
+                                //TODO: You will probably need to identify block types to determine from and to values to apply mark.
+                                if (!Processor.END_RE.test(original)) return;
+                                const parsed = Processor.parse(original) ?? [];
+
+                                for (const item of parsed) {
+                                    const { attributes, text } = item;
+                                    const end =
+                                        original.indexOf(text) + text.length;
+                                    const match = original
+                                        .trim()
+                                        .match(
+                                            new RegExp(
+                                                `\\{\\s?${text}\s?\\}$`,
+                                                "m"
+                                            )
+                                        );
+                                    targetElements.push({
+                                        from: from + match.index - 1,
+                                        to:
+                                            from +
+                                            match.index +
+                                            match[0].length,
+                                        loc: { from, to: from + end },
+                                        value: match[0],
+                                        attributes,
+                                        index: match.index
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    this.manager.updateDecos(targetElements);
+                }
+            }
+        );
+
+        ////////////////
+        // Utility Code
+        ////////////////
+
+        const replace = StateEffect.define<DecorationSet>();
+        const field = StateField.define<DecorationSet>({
+            create(): DecorationSet {
+                return Decoration.none;
+            },
+            update(deco, tr): DecorationSet {
+                return tr.effects.reduce((deco, effect) => {
+                    if (effect.is(replace))
+                        return effect.value.update({
+                            filter: (_, __, decoration) => {
+                                return !rangesInclude(
+                                    tr.newSelection.ranges,
+                                    decoration.spec.loc.from,
+                                    decoration.spec.loc.to
+                                );
+                            }
+                        });
+                    return deco;
+                }, deco.map(tr.changes));
+            },
+            provide: (field) => EditorView.decorations.from(field)
+        });
+
+        return [field, plugin];
+    }
+
+    isLivePreview(state: EditorState) {
+        if (requireApiVersion && requireApiVersion("0.13.23")) {
+            return state.field(editorLivePreviewField);
+        } else {
+            const md = state.field(editorViewField);
+            const { state: viewState } = md.leaf.getViewState() ?? {};
+
+            return (
+                viewState &&
+                viewState.mode == "source" &&
+                viewState.source == false
+            );
+        }
+    }
 
     async onunload() {
         console.log("Markdown Attributes unloaded");
     }
+}
+
+function rangesInclude(
+    ranges: readonly SelectionRange[],
+    from: number,
+    to: number
+) {
+    for (const range of ranges) {
+        const { from: rFrom, to: rTo } = range;
+        if (rFrom >= from && rFrom <= to) return true;
+        if (rTo >= from && rTo <= to) return true;
+        if (rFrom < from && rTo > to) return true;
+    }
+    return false;
 }

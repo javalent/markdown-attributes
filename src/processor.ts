@@ -1,5 +1,5 @@
 interface ElementWithAttributes {
-    element: Element;
+    element?: Element;
     attributes: [string, string][];
     text: string;
     /* replacer: (...args: any) => void; */
@@ -9,11 +9,33 @@ export default class Processor {
     static BASE_RE = /\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}/;
     static ONLY_RE = /^\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}$/;
     static BLOCK_RE = /\n[ ]*\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}[ ]*$/;
+    static END_RE = /\{\:?[ ]*([^\}\n ][^\}\n]*)[ ]*\}$/m;
 
-    constructor(private topLevelElement: HTMLElement) {}
+    constructor() {}
 
-    static parse(el: HTMLElement) {
-        return new Processor(el).recurseAndParseElements(el);
+    static parse(el: HTMLElement): ElementWithAttributes[];
+    static parse(el: string): ElementWithAttributes[];
+    static parse(el: string | HTMLElement) {
+        if (typeof el == "string") {
+            return new Processor().parseLine(el);
+        } else {
+            return new Processor().recurseAndParseElements(el);
+        }
+    }
+    parseLine(text: string) {
+        const elements: ElementWithAttributes[] = [];
+        // Parse out the attribute string.
+        let attribute_strings = text.matchAll(
+            new RegExp(Processor.END_RE.source, "gm")
+        );
+
+        for (const [_, match] of attribute_strings) {
+            elements.push({
+                attributes: this.getAttrs(match),
+                text: match
+            });
+        }
+        return elements;
     }
 
     /**
