@@ -163,10 +163,7 @@ export default class MarkdownAttributes extends Plugin {
                     //need to add in additional locations to the caches so that the reveal transaction will properly surface them
                     const deco = Decoration.replace({
                         inclusive: true,
-						loc: {
-							from: token.from,
-							to: token.to
-						}
+						loc: token.loc
                     });
 
                     const marker = Decoration.mark({
