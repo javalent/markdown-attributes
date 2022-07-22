@@ -296,8 +296,7 @@ export default class MarkdownAttributes extends Plugin {
                 return tr.effects.reduce((deco, effect) => {
                     if (effect.is(replace))
                         return effect.value.update({
-							// @ts-ignore
-                            filter: (_, __, decoration) => {
+							filter: (_, __, decoration) => {
                                 return !rangesInclude(
                                     tr.newSelection.ranges,
                                     decoration.spec.loc.from,
