@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/valentine195/obsidian-markdown-attributes/compare/1.1.1...1.2.0) (2022-09-12)
+
+
+### Features
+
+* Callouts can now have block level attributes placed on them ([e16a647](https://github.com/valentine195/obsidian-markdown-attributes/commit/e16a64775ff22257ab839cbfa3685ab39a6c58b7))
+
+
+### Bug Fixes
+
+* fixes cm6 migration issues ([4d8b7b9](https://github.com/valentine195/obsidian-markdown-attributes/commit/4d8b7b9a39a77faf9a2354ab55dd8c1582f3b706))
+
 ### [1.1.1](https://github.com/valentine195/obsidian-markdown-attributes/compare/1.1.0...1.1.1) (2022-02-26)
 
 
