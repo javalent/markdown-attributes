@@ -6,7 +6,6 @@ import {
     requireApiVersion,
     TFile
 } from "obsidian";
-import { Range } from "@codemirror/rangeset";
 import {
     EditorView,
     Decoration,
@@ -15,12 +14,13 @@ import {
     ViewUpdate
 } from "@codemirror/view";
 import { syntaxTree } from "@codemirror/language";
-import { tokenClassNodeProp } from "@codemirror/stream-parser";
+import { tokenClassNodeProp } from "@codemirror/language";
 import {
     SelectionRange,
     StateEffect,
     StateField,
-    EditorState
+    EditorState,
+    Range
 } from "@codemirror/state";
 
 import Processor from "./processor";
@@ -232,9 +232,10 @@ export default class MarkdownAttributes extends Plugin {
                         tree.iterate({
                             from,
                             to,
-                            enter: (type, from, to) => {
+                            enter: ({ node }) => {
+                                const type = node.type;
                                 const tokenProps =
-                                    type.prop(tokenClassNodeProp);
+                                    type.prop<string>(tokenClassNodeProp);
 
                                 const props = new Set(tokenProps?.split(" "));
                                 if (
