@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/valentine195/obsidian-markdown-attributes/compare/1.2.1...1.2.2) (2022-10-21)
+
+
+### Bug Fixes
+
+* fixes some live preview errors ([38198e3](https://github.com/valentine195/obsidian-markdown-attributes/commit/38198e343aad0e74915ad289c96a25ff36c965e7))
+
 ### [1.2.1](https://github.com/valentine195/obsidian-markdown-attributes/compare/1.2.0...1.2.1) (2022-10-21)
 
 
