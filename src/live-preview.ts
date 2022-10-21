@@ -123,7 +123,10 @@ function selectionAndRangeOverlap(
 
 function inlineRender(view: EditorView) {
     // still doesn't work as expected for tables and callouts
-
+    if (!view.state.field(editorLivePreviewField)) {
+        this.decorations = Decoration.none;
+        return;
+    }
     const currentFile = app.workspace.getActiveFile();
     if (!currentFile) return;
 
