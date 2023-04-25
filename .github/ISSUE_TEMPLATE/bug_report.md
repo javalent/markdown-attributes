@@ -1,66 +1,47 @@
 ---
 name: Bug report
-about: 'Use this template to report a bug or an issue'
-description: File a bug/issue
-title: "[Bug]: "
-labels:
-  - bug
-body:
-  - type: markdown
-    attributes:
-      value: Thank you for taking the time to write this report!
-  - type: checkboxes
-    id: Obsidian-Versions
-    attributes:
-      label: Obsidian Version
-      description: Please check off to confirm the following. If you are not on these
-        versions, please upgrade first and try again.
-      options:
-        - label: Your Obsidian Installer Version is at least 1.1.9
-          required: true
-        - label: Your Obsidian Application Version is at Least 1.1.5
-          required: true
-  - type: textarea
-    id: description
-    attributes:
-      label: Describe the Bug
-      description: A clear and concise description of what the bug is
-      placeholder: When I apply my custom class to a single wiki link, the color
-        applies, but the text-shadow does not apply.
-    validations:
-      required: true
-  - type: textarea
-    id: css-or-scss
-    attributes:
-      label: CSS
-      description: Please paste the CSS (Or SCSS/SASS if applicable) you are trying to
-        use below.
-      placeholder: "```css .font-test {     font-family: fantasy;     font-size:
-        1.5em; font-weight: 700;     font-style: italic;     text-decoration:
-        underline;     text-transform: uppercase;     text-align: center; color:
-        #ff0000;     background-color: #00ff00;     line-height: 1.5;
-        letter-spacing: 0.5em;     word-spacing: 1em;     text-indent: 1em;
-        text-shadow: 0.1em 0.1em 0.1em #000000;     white-space: pre-wrap;
-        border: 1px solid #000000;     border-radius: 1em;     padding: 1em;
-        margin: 1em;     width: 50%;     height: 50%;     overflow: auto;
-        box-shadow: 0.1em 0.1em 0.1em #000000;     opacity: 0.5; }"
-    validations:
-      required: true
-  - type: textarea
-    id: markdown-input
-    attributes:
-      label: Markdown Input
-      description: What is the markdown input you are attempting to add a class to?
-      placeholder: "[[Link-me!]] { .link-me-my-friend}"
-    validations:
-      required: true
-  - type: textarea
-    id: screenshot-video
-    attributes:
-      label: Screenshot, Gif, or Video
-      description: Please Attach a Screenshot, Gif, or Video
-      placeholder: This helps us understand visually what is happening. :)
-    validations:
-      required: true
+about: 'Use this template to report a bug'
+description: 'Use this template to report a bug'
+labels: 'bug'
+title: '[Bug]: '
 
 ---
+
+The bug tracker is **ONLY** used for reporting bugs. 
+
+
+## Version Check
+
+<!--- Please provide your current Obsidian application version, Obsidian Installer version, and operating system. If your installer version is not 1.1.9, please reinstall on top of your current install, and try your issue again first. -->
+
+
+
+<!--- Provide a general summary of the issue in the Title above -->
+
+## What is the expected behavior
+<!--- Tell us what should happen. Can you cite documentation as well in case it needs updating? -->
+
+
+## What is the current behavior
+<!--- Tell us what happens instead of the expected behavior -->
+
+
+## What are the A-to-Z Steps to Reproduce your Bug?
+<!--- Provide a link to a live example, or an unambiguous set of steps to -->
+<!--- reproduce this bug. Include code to reproduce -->
+1.
+2.
+3.
+4.
+
+
+## Error Codes
+<!--- Did Obsidian give you any Error Codes in the Developer Tools? Any other context? -->
+<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+
+<!--- Provide a general summary of the issue in the Title above -->
+
+
+## Screenshots and Video
+<!--- Provide a screenshot, a gif, or video. This helps adds additional context and points out more of what is happening. -->
+
