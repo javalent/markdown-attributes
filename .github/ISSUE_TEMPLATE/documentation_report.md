@@ -1,6 +1,6 @@
 ---
 name: Documentation report
-about: 'Use this request an update to documentation'
+about: 'Use this to request an update to documentation'
 description: 'Use this request an update to documentation'
 labels: 'documentation'
 title: '[Docu]: '
@@ -23,11 +23,11 @@ title: '[Docu]: '
 <!--- Examples: The example given is wrong. This was removed in version 3.2. Your song is NOT funny! -->
 
 
-### In the cases of issues of clarity, do you have any suggestions on what would make it more clear to you?
+### In the case of needing more clarity, do you have any suggestions on what would make it clearer to you?
 
 <!--- What is your suggestion? --->
 
-## I think this issue would be resolved by...
+## I think __________ would resolve this issue by...
 
 <!--- What is your suggestion? --->
 
