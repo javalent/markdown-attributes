@@ -1,5 +1,6 @@
 ---
 name: Bug report
+about: 'Use this template to report a bug or an issue'
 description: File a bug/issue
 title: "[Bug]: "
 labels:
