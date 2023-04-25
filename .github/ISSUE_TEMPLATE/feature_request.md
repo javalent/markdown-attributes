@@ -7,7 +7,11 @@ title: '[Feature]: '
 
 ---
 
-Thank you for submitting a request! Please answer the following carefully to help us triage implementation priority appropriately. 
+> Thank you for submitting a request! 
+>
+> Please answer the following carefully to help us triage implementation priority appropriately. 
+
+# Summary
 
 
 <!--- Provide a general summary of the issue in the Title above -->
@@ -36,11 +40,10 @@ Thank you for submitting a request! Please answer the following carefully to hel
 
 
 ## Are you willing to personally help out on this project, such as design, documentation, coding, project management, etc? (Bold One) Yes / No
-### If yes, please answer the following.
-
-1. What resources/assistance will you need from the developer and team?
+### If yes, please answer the following:
+1. What resources and/or assistance will you need from the developer and team?
 2. What is your expected timeline of help?
-3. Are there any scheduling conflicts that would require you to back out if this was picked up to be worked on today, next week, next month?
+3. Are there any scheduling conflicts that would require you to back out if this was picked up to be worked on today, or next week, or next month?
 4. Would you be willing to set some time aside to talk to @Sigrunixia and/or @Javalent on discord to figure out how best to help us help you get what you want out of this request?
 
 ### If No
