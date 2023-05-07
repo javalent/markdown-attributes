@@ -1,161 +1,40 @@
-# Markdown Attributes for Obsidian.md
+> 🥇 Our documentation has moved ***[here](https://plugins.javalent.com/attributes)***.
+>
+> <a href='https://www.buymeacoffee.com/valentine195' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+---
 
-Allows the use of `{ .class id='id' data=value }` Pandoc-style markdown attributes inside Obsidian.md.
+Markdown Attributes is a proof of concept [Obsidian](https://obsidian.md/) plugin that allows users to add Pandoc-style markdown attributes to various elements such as text, headers, tables, links, lists, code blocks, and block quotes.
 
-This plugin is currently proof of concept; however, no loss of data should occur. It is possible that rendering errors may happen. If so, please create an issue including the source text that caused the issue.
+This plugin enhances Obsidian's functionality by providing more options for customization and organization within notes. Note that while this plugin is stable and should not result in any loss of data, rendering errors may occur.
 
-## Using the Plugin
+## Features
+- Allows using Pandoc-style markdown attributes
+- Supports attributes for:
+   - Inline text elements such as italics, bold and highlights 
+   - Paragraphs
+   - Headers 
+   - Tables and individual table cells 
+   - Links (both Wikilinks and Markdown syntax links)
+   - Lists and individual list items 
+   - Code blocks, Block quotes, and Obsidian callouts
 
-Add your attributes inside a curly bracket with a colon, like this:
+### Quickstart
 
-`{ .class }`
+1. To add an attribute to an element, surround the attribute name and value in curly braces {}. For example, to add a class attribute to a paragraph, write `{ .my-class }` at the end of the paragraph.
+2. To add an ID attribute to an element, use the format `id=identifier`. For example, to add an ID attribute to a header, write `{ id=my-header }` at the end of the header line.
+3. You can add attributes to a variety of elements, including paragraphs, headers, tables, links, lists, code blocks and block quotes. See the specific usage examples above for more information.
+4. If you encounter any rendering errors, create an issue and include the source text that caused the problem.
 
-See below for usage with specific elements.
+Check out the **[plugin documentation](https://plugins.javalent.com/attributes)** for more detailed instructions and examples.
 
-### IDs
+## Support
 
-Currently, the ID attribute must be set using `id=value` due to Obsidian's tags. This may change in a future release.
+If you encounter any issues, want to give back and help out, or have suggestions for new features, file an issue on the **[GitHub repository](https://github.com/javalent/markdown-attributes/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)**.
 
-### Inline Text Elements
+### Complementary plugins
 
-Inline text elements such as italics, bold, highlight, etc. should have their attributes placed _inside_ the symbol:
+If you're using Obsidian to better organize your notes, you may find some of my other plugins useful:
 
-```
-I'm normal text, but *I'm italic { class='italics' }*, **I'm bold { .bold }** and ==I'm highlighted { id=highlight }==.
-```
-
-### Paragraphs
-
-Paragraph attributes should be placed after the last line of the block.
-
-```
-This is a paragraph.
-This is another line of the paragraph.
-This is the last line.
-{ id=my_paragraph .class }
-```
-
-### Headers
-
-Attributes must be added to headers at the end of the line.
-
-`### A Header { id=header .header-class }`
-
-### Tables
-
-Attributes can be added to the `<table>` element by placing the attribute on the line below it.
-
-```markdown
-| header1 | header2 |
-| ------- | ------- |
-| column1 | column2 |
-{ .table-class}
-```
-
-Attributes can be added to individual table cells like so:
-
-```markdown
-| header1 { .class} | header2                |
-| ------------------ | ---------------------- |
-| column1            | column2 { .class-two} |
-```
-
-It is not currently possible to add attributes to `<tr>` or `<thead>` elements.
-
-### Links
-
-Both Wikilinks and markdown syntax links may have attributes placed on them.
-
-`[link](http://example.com){ class="foo bar" title="Some title!" }`
-
-`[[Test 123]] { .wikilink}`
-
-### Lists
-
-Lists may have attributes placed on each individual list item.
-
-```markdown
--   item { .item}
-    -   nested item { .nested}
-    -   nested item 2 { id="item 2" }
-```
-
-Attributes can only be applied to the final nested list by placing the attribute on the line immediately following the last item.
-
-```markdown
--   item 1 { .item}
--   item 2 { id=item }
--   item 3 { data-item=3 }
-    { .top-level-ul }
-```
-
-```markdown
--   item { .item}
-    -   nested item { .nested}
-    -   nested item 2 { id="item 2" }
-        { .nested-ul}
-```
-
-### Code Blocks
-
-Code blocks should have their attributes placed after the initial three ticks.
-
-````
-```python { data-python="code" .class }
-nums = [x for x in range(10)]
-```
-````
-
-Please note that at the moment, changes to code block attributes will not take effect until you reload the note.
-
-### Block Quotes
-
-Block quotes can by targeted by placing the attributes directly after the last line of the quote.
-
-```md
-> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-{ .class }
-
-```
-
-> :pencil: This syntax also works for Obsidian callouts!
-
-## 1.0.0
-
--   Release
-
-# Installation
-
-## From within Obsidian
-
-From Obsidian v0.9.8, you can activate this plugin within Obsidian by doing the following:
-
--   Open Settings > Third-party plugin
--   Make sure Safe mode is **off**
--   Click Browse community plugins
--   Search for this plugin
--   Click Install
--   Once installed, close the community plugins window and activate the newly installed plugin
-
-## From GitHub
-
--   Download the Latest Release from the Releases section of the GitHub Repository
--   Extract the plugin folder from the zip to your vault's plugins folder: `<vault>/.obsidian/plugins/`  
-    Note: On some machines the `.obsidian` folder may be hidden. On MacOS you should be able to press `Command+Shift+Dot` to show the folder in Finder.
--   Reload Obsidian
--   If prompted about Safe Mode, you can disable safe mode and enable the plugin.
-    Otherwise head to Settings, third-party plugins, make sure safe mode is off and
-    enable the plugin from there.
-
-### Updates
-
-You can follow the same procedure to update the plugin
-
-# Warning
-
-This plugin comes with no guarantee of stability and bugs may delete data.
-Please ensure you have automated backups.
-
-
-<a href="https://www.buymeacoffee.com/valentine195"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=valentine195&button_colour=e3e7ef&font_colour=262626&font_family=Inter&outline_colour=262626&coffee_colour=ff0000"></a>
+- [Admonitions](https://github.com/javalent/admonitions) Create and customize code-block callouts.
+- [Prominent Bookmarked Files](https://github.com/javalent/prominent-files) Make your Bookmarked files stand out better on the file pane.
+- [Settings Search](https://github.com/javalent/settings-search) Get to your settings faster.
