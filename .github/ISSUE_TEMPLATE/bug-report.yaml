@@ -1,6 +1,8 @@
 name: Bug Report
 description: File a bug report
-labels: ["type: bug"]
+labels: bug
+assignees: Valentine195
+title: "[Bug]: "
 body:
   - type: markdown
     attributes:
@@ -87,7 +89,7 @@ body:
     attributes:
       label: Plugin Version
       description: Which plugin version are you using?
-      placeholder: 3.6.3
+      placeholder: x.x.x
     validations:
       required: true
 
