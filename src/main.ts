@@ -19,6 +19,12 @@ export default class MarkdownAttributes extends Plugin {
         if (!child) return;
         let str: string;
 
+        /**
+         * A quick test to avoid causing performance issue in <dataview> plugin.
+         * Keypoint: use `textContent` instead of `innerText`.
+         */
+        if (!topElement.textContent.contains("{")) return;
+
         /** Code blocks have to be handled separately because Obsidian does not
          *  include any text past the language.
          *
