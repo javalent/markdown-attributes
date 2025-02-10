@@ -25,7 +25,7 @@
         "@rollup/plugin-typescript": "^6.0.0",
         "@types/node": "^14.14.2",
         "dotenv": "^10.0.0",
-        "esbuild": "^0.14.2",
+        "esbuild": "^0.25.0",
         "obsidian": "^0.16.3",
         "rollup": "^2.32.1",
         "rollup-plugin-css-only": "^3.1.0",
